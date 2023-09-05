@@ -15,7 +15,6 @@ export const subscribe = async () => {
     const premissionResult = await window?.Notification.requestPermission();
     if (premissionResult === "denied") alert("Premisson already denied, please enable notifications manually");
     if (!swRegistration) {
-      alert(`Service worker is not registered`);
       throw new Error("Service worker not registered");
     }
 
@@ -29,7 +28,8 @@ export const subscribe = async () => {
 
     console.log({ subscription });
   } catch (err) {
-    console.error("Error", err);
+    console.error("Inside subscribe function: ", err);
+    throw new Error("Error while subscribing to push notifications");
   }
 };
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useIsClient } from "usehooks-ts";
+import { notification } from "~~/utils/scaffold-eth";
 import { notificationsSupported, subscribe } from "~~/utils/service-workers";
 
 export const PWANotificationHinter = () => {
@@ -15,11 +16,12 @@ export const PWANotificationHinter = () => {
           setIsLoading(true);
           await subscribe();
         } catch (e) {
-          alert(`Error happend while subscribing`);
-          console.log("Error happend:", e);
+          if (e instanceof Error) {
+            notification.error(e.message);
+          }
+        } finally {
           setIsLoading(false);
         }
-        setIsLoading(false);
       }}
     >
       {isLoading ? (

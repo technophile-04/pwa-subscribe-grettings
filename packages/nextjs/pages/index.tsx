@@ -1,8 +1,10 @@
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { PWANotificationHinter } from "~~/components/PWANotificationHinter";
+import { useGlobalState } from "~~/services/store/store";
 
 const Home: NextPage = () => {
+  const pushNotificationSubscription = useGlobalState(state => state.pushNotificationSubscription);
   return (
     <>
       <MetaHeader />
@@ -12,7 +14,7 @@ const Home: NextPage = () => {
             <span className="block text-2xl mb-2">Welcome to</span>
             <span className="block text-4xl font-bold">Scaffold-ETH 2 PWA 📱</span>
           </h1>
-          <PWANotificationHinter />
+          {!pushNotificationSubscription && <PWANotificationHinter />}
         </div>
       </div>
     </>
