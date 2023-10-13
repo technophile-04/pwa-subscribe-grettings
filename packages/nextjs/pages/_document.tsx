@@ -7,7 +7,7 @@ class MyDocument extends Document {
         <Head>
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="apple-touch-fullscreen" content="yes" />
-          <meta name="apple-mobile-web-app-title" content="SE-2 App" />
+          <meta name="apple-mobile-web-app-title" content="Greetings" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />
           <link rel="manifest" href="/manifest.json" />

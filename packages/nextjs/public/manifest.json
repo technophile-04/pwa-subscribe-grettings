@@ -4,8 +4,8 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "Scaffold-ETH 2 App",
-  "short_name": "SE-2 App",
+  "name": "Greetings App",
+  "short_name": "Greetings",
   "description": "Built with \ud83c\udfd7 Scaffold-ETH 2",
   "icons": [
     {
