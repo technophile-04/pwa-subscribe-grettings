@@ -1,16 +1,39 @@
+import { useState } from "react";
 import { hardhat } from "wagmi/chains";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { SwitchTheme } from "~~/components/SwitchTheme";
 import { Faucet } from "~~/components/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { deleteSubscription } from "~~/utils/push-api-calls";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 /**
  * Site footer
  */
 export const Footer = () => {
-  const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrencyPrice);
+  const { nativeCurrencyPrice, setPushNotificationSubscription, pushNotificationSubscription } = useGlobalState(
+    state => state,
+  );
+  const [unsubscribing, setUnsubscribing] = useState(false);
+  const unsubscribeMe = async () => {
+    setUnsubscribing(true);
+    try {
+      const swRegistration = await navigator.serviceWorker.ready;
+      const subscription = await swRegistration.pushManager.getSubscription();
+      if (!subscription) {
+        setPushNotificationSubscription(null);
+        return;
+      }
+      await deleteSubscription(subscription);
+      await subscription?.unsubscribe();
+      setPushNotificationSubscription(null);
+    } catch {
+      notification.error("Failed to unsubscribe");
+    } finally {
+      setUnsubscribing(false);
+    }
+  };
 
   return (
     <div className="min-h-0 py-5 px-1 mb-11 lg:mb-0">
@@ -24,6 +47,16 @@ export const Footer = () => {
               </div>
             )}
             {getTargetNetwork().id === hardhat.id && <Faucet />}
+
+            {pushNotificationSubscription && (
+              <button
+                className="btn btn-primary btn-sm font-normal cursor-auto gap-0 normal-case"
+                disabled={unsubscribing}
+                onClick={unsubscribeMe}
+              >
+                {unsubscribing ? <span className="loading loading-dots loading-xs"></span> : "unsubscribe"}
+              </button>
+            )}
           </div>
           <SwitchTheme className="pointer-events-auto" />
         </div>

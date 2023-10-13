@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { decodeEventLog, parseAbi } from "viem";
 import webpush, { PushSubscription } from "web-push";
 import { deleteSubscriptionFromDB, getAllSubsriptionsFromDb } from "~~/database/firebase/utils";
 
@@ -26,24 +27,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(405).json({ error: "Method not allowed" });
   }
 
-  console.log("Req Body", req.body.message);
-
-  if (!req.body || !req.body.message) {
-    console.log("ReqBody", req.body.message);
+  if (!req.body || !req.body.logs || req.body.logs?.length === 0) {
+    console.log("ReqBody", req.body);
     // Not a valid subscription.
     res.status(400);
     res.setHeader("Content-Type", "application/json");
     res.send(
       JSON.stringify({
-        id: "no-endpoint",
-        message: "Notify all failed, no message provided",
+        error: {
+          id: "no-endpoint",
+          message: "Notify all must have body & logs",
+        },
       }),
     );
     return;
   }
 
   try {
-    const message = req.body.message;
+    const topics = decodeEventLog({
+      abi: parseAbi(["event GreetingChange(address indexed, string, bool, uint256)"]),
+      data: req.body.logs[0].data,
+      topics: req.body.logs[0].topics,
+    });
+    const message = topics.args[1];
     const subscriptions = await getAllSubsriptionsFromDb();
 
     if (subscriptions && subscriptions.length > 0) {

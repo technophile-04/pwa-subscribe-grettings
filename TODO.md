@@ -1,0 +1,4 @@
+- [x] Setup firebase and VAPID KEY
+- [x] Add notification button in tool tip
+- [x] Add cron job with tenderly which sends notification
+- [ ] Create an example with gist to use Transactor with wagmi hook

@@ -12,10 +12,10 @@ self.addEventListener("message", event => {
 
 self.addEventListener("push", async event => {
   console.log(event);
-  const data = event.data?.text();
+  const message = event.data?.text();
   event?.waitUntil(
-    self.registration.showNotification("Test Title", {
-      body: data,
+    self.registration.showNotification("Greetings Changed", {
+      body: message,
       icon: "/logo.svg",
     }),
   );

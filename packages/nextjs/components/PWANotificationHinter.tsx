@@ -14,7 +14,7 @@ export const PWANotificationHinter = () => {
 
   if (!notificationsSupported()) {
     return (
-      <button className="btn btn-primary" disabled={true}>
+      <button className="btn btn-primary btn-sm" disabled={true}>
         Please install PWA first
       </button>
     );
@@ -23,7 +23,7 @@ export const PWANotificationHinter = () => {
   if (window.Notification.permission !== "granted") {
     return (
       <button
-        className="btn btn-primary"
+        className="btn btn-primary btn-sm"
         disabled={isAskForPermissionLoading}
         onClick={async () => {
           try {
@@ -45,7 +45,7 @@ export const PWANotificationHinter = () => {
 
   return (
     <button
-      className="btn btn-primary"
+      className="btn btn-primary btn-sm"
       disabled={isSubscribeLoading}
       onClick={async () => {
         setIsSubscribeLoading(true);
@@ -62,7 +62,7 @@ export const PWANotificationHinter = () => {
         }
       }}
     >
-      {isSubscribeLoading ? <span className="loading loading-dots loading-xs"></span> : "Subscribe to notifications"}
+      {isSubscribeLoading ? <span className="loading loading-dots loading-xs"></span> : "Subscribe"}
     </button>
   );
 };
